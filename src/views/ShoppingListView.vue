@@ -1,0 +1,9 @@
+<script setup lang="ts">
+
+</script>
+
+<template>
+    <main>
+        <h1>Shopping Lists</h1>
+    </main>
+</template>
