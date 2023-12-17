@@ -4,10 +4,32 @@
 @tailwind components;
 @tailwind utilities;
 
-#app {
-
+:root {
+    --main-color: #6366f1
 }
 
+button {
+    background-color: var(--main-color);
+    font-size: 1.5em;
+    padding: 10px 20px;
+    border-radius: 30px;
+    width: 100%;
+    color: white;
+}
+
+form input:not(input[type="checkbox"]) {
+    border: 2px solid var(--main-color);
+    width: 100%;
+    font-size: 1.25em;
+    padding: 10px;
+    outline: none;
+    border-radius: 10px;
+}
+
+input[type=number] {
+    appearance: none;
+    -moz-appearance: textfield;
+}
 
 @media (hover: hover) {
  

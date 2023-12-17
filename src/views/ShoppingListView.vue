@@ -5,5 +5,6 @@
 <template>
     <main>
         <h1>Shopping Lists</h1>
+        <button>New List</button>
     </main>
 </template>

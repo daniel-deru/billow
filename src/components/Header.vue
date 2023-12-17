@@ -4,6 +4,6 @@
 
 <template>
     <header>
-        <h1>Billow</h1>
+        <h1></h1>
     </header>
 </template>
