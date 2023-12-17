@@ -18,5 +18,10 @@ export const useListsStore = defineStore('lists', () => {
     lists.value.push(...newLists)
   }
 
-  return { lists, addList, loadLists }
+  function getList(listId: string){
+    const list: IList = lists.value.filter(list => list.id == listId)[0]
+    return list
+  }
+
+  return { lists, addList, loadLists, getList }
 })

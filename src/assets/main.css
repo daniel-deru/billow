@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-    --main-color: #6366f1
+    --main-color: #6366f1;
 }
 
 button {

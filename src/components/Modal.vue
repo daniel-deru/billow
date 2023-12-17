@@ -1,23 +1,74 @@
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from "vue"
+// Imports
+import { ref, defineProps, defineEmits, computed} from "vue"
+import { useItemsStore } from "@/stores/items"
+import { v4 as uuidv4 } from "uuid"
+import { useRouter } from "vue-router"
 
-const name = ref<string>("")
-const price = ref<number>()
-const quanity = ref<number>(1)
-const planned = ref<boolean>(false)
-
-function changeQuantity(delta: number){
-    if(quanity.value == 1 && delta == -1) return
-    quanity.value += delta
-}
-
+// Types & Interfaces
+import type { FormHTMLAttributes } from 'vue'
+import type { IItem } from "@/stores/items"
 
 interface IModalProps {
     isOpen: boolean
 }
 
-defineProps<IModalProps>()
+// Hooks
+const router = useRouter()
+const itemStore = useItemsStore()
+const { addItem } = itemStore
 
+// State
+const name = ref<string>("")
+const price = ref<number | null>(null)
+const quanity = ref<number>(1)
+const planned = ref<boolean>(false)
+
+const formRef = ref<FormHTMLAttributes>()
+
+// Computed Properties
+const total = computed<number>(() => {
+    if(price?.value && quanity.value > 0){
+        return price.value * quanity.value
+    }
+    return 0
+})
+
+// Functions
+function changeQuantity(delta: number){
+    if(quanity.value == 1 && delta == -1) return
+    quanity.value += delta
+}
+
+function createItem(){
+    const routeList = router.currentRoute.value.fullPath.split("/")
+    const listId = routeList[routeList.length - 1]
+
+    const newItem: IItem = {
+        name: name.value,
+        price: price.value || 0,
+        quantity: quanity.value,
+        planned: planned.value,
+        id: uuidv4(),
+        listId: listId
+    }
+
+    addItem(newItem)
+    emit("modal-close")
+    clearForm()
+}
+
+function clearForm(){
+    name.value = ""
+    price.value = null
+    quanity.value = 1
+    planned.value = false
+}
+
+// Lifecycle Hooks
+
+// Macros
+defineProps<IModalProps>()
 const emit = defineEmits(["modal-close"])
 
 </script>
@@ -26,7 +77,7 @@ const emit = defineEmits(["modal-close"])
     <section v-if="isOpen">
         <div>
             <h1 class="text-2xl text-center">Add Item</h1>
-            <form class="mt-4">
+            <form class="mt-4" ref="formRef">
                 <div>
                     <label for="name">Name</label>
                     <input type="text" v-model="name" name="name" placeholder="Eg: Bananas">
@@ -44,15 +95,15 @@ const emit = defineEmits(["modal-close"])
                     </div>
 
                 </div>
-                <div>
+                <div class="mt-4">
                     <input type="checkbox" v-model="planned" name="planned" class="mr-2">
                     <label for="planned" class="inline-label">Planned</label>
                 </div>
-                <div></div>
+                <div class="text-center text-4xl mt-8">{{ total.toFixed(2) }}</div>
             </form>
         </div>
         
-        <button @click.prevent="emit('modal-close')" class="submit-btn">Create Item</button>
+        <button @click.prevent="createItem" class="submit-btn">Create Item</button>
     </section>
 </template>
 
