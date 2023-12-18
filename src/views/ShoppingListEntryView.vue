@@ -5,6 +5,8 @@ import { useRouter } from "vue-router"
 import { useListsStore } from "@/stores/lists"
 import { useItemsStore } from "@/stores/items"
 import GroceryListItem from "@/components/GroceryListItem.vue"
+import { Icon } from '@iconify/vue';
+import { storeToRefs } from "pinia"
 
 import type { IList } from "@/stores/lists"
 import type { IItem } from "@/stores/items"
@@ -13,11 +15,13 @@ const modalOpen = ref<boolean>(false)
 const list = ref<IList>()
 const items = ref<IItem[]>([])
 
+
 const listStore = useListsStore()
 const itemStore = useItemsStore()
 const { getList } = listStore
 const { getItems } = itemStore
 
+// const { items } = storeToRefs(itemStore)
 const router = useRouter()
 
 const totalCost = computed<number>(() => {
@@ -42,9 +46,13 @@ onMounted(() => {
 })
 
 onUpdated(() => {
-    if(list.value?.id) {
-        items.value = getItems(list.value.id)
-    }
+    // if(list.value?.id) {
+    //     items.value = getItems(list.value.id)
+    // }
+    // const routeList = router.currentRoute.value.fullPath.split("/")
+    // const id = routeList[routeList.length - 1]
+    // list.value = getList(id)
+    // items.value = getItems(id)
 })
 
 </script>
@@ -52,7 +60,15 @@ onUpdated(() => {
 <template>
     <main>
         <section>
-            <h1 class="text-center text-2xl mb-4">{{ list?.name }}</h1>
+            <div class="flex justify-between">
+                <Icon 
+                    icon="bxs:chevron-left" 
+                    class="align-middle text-4xl text-indigo-500"
+                    @click.prevent="() => router.back()"
+                />
+                <h1 class="text-center text-2xl mb-4">{{ list?.name }}</h1>
+                <Icon icon="clarity:home-solid" class="align-middle text-3xl text-indigo-500" @click.prevent="() => router.push('/')"/>
+            </div>
             <div>
                 <section class="text-lg font-bold">
                     <div class="summary">

@@ -1,10 +1,11 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
+
 export interface IList {
   name: string,
   date: number,
-  id: string 
+  id: string
 }
 
 export const useListsStore = defineStore('lists', () => {
@@ -23,5 +24,9 @@ export const useListsStore = defineStore('lists', () => {
     return list
   }
 
-  return { lists, addList, loadLists, getList }
+  function deleteList(listId: string) {
+    lists.value = lists.value.filter(listItem => listItem.id != listId)
+  }
+
+  return { lists, addList, loadLists, getList, deleteList }
 })

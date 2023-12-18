@@ -26,5 +26,11 @@ export const useItemsStore = defineStore('items', () => {
     return listItems
   }
 
-  return { items, addItem, addItems, getItems }
+  function removeItem(itemId: string) {
+    console.log(items.value)
+    items.value = items.value.filter(item => item.id != itemId)
+    console.log(items.value)
+  }
+
+  return { items, addItem, addItems, getItems, removeItem }
 })
