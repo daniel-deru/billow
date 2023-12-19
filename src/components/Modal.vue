@@ -4,6 +4,7 @@ import { ref, defineProps, defineEmits, computed} from "vue"
 import { useItemsStore } from "@/stores/items"
 import { v4 as uuidv4 } from "uuid"
 import { useRouter } from "vue-router"
+import Header from "./Header.vue"
 
 // Types & Interfaces
 import type { FormHTMLAttributes } from 'vue'
@@ -65,6 +66,10 @@ function clearForm(){
     planned.value = false
 }
 
+function goBack(){
+    emit("modal-close")
+}
+
 // Lifecycle Hooks
 
 // Macros
@@ -76,7 +81,7 @@ const emit = defineEmits(["modal-close"])
 <template>
     <section v-if="isOpen">
         <div>
-            <h1 class="text-2xl text-center">Add Item</h1>
+            <Header title="Add Item" :back-button-action="goBack"/>
             <form class="mt-4" ref="formRef">
                 <div>
                     <label for="name">Name</label>

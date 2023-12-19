@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { useListsStore, } from '@/stores/lists';
-// import type { IList } from '@/stores/lists';
+import { useListsStore, } from '@/stores/lists'
 import { v4 as uuidv4 } from "uuid"
-import ShoppingListItem from '@/components/ShoppingListItem.vue';
-// import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
+import ShoppingListItem from '@/components/ShoppingListItem.vue'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import Header from '@/components/Header.vue'
 
-// const list = ref<IList>()
 
 const listStore = useListsStore()
 const { lists } = storeToRefs(listStore)
@@ -24,7 +22,6 @@ function createList(){
         id: uuidv4()
     }
 
-    // list.value = newList
     addList(newList)
 
     router.push(`/shopping-lists/${newList.id}`)
@@ -32,12 +29,10 @@ function createList(){
 </script>
 
 <template>
-    <main class="shopping-container">
+    <main class="shopping-container">  
         <section>
-            <h1 class="text-center text-2xl">My Shopping Lists</h1>
-            <div>
-                <ShoppingListItem v-for="listItem in lists" :list="listItem" :key="listItem.id" />
-            </div>
+            <Header title="My Shopping Lists"/>
+            <ShoppingListItem v-for="listItem in lists" :list="listItem" :key="listItem.id" />
         </section>
         <button @click.prevent="createList">New List</button>
     </main>
@@ -46,7 +41,6 @@ function createList(){
 <style scoped>
 .shopping-container {
     padding: 10px;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
