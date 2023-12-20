@@ -7,6 +7,7 @@ const router = useRouter()
 onMounted(() => {
   router.push("/shopping-lists")
 })
+
 </script>
 
 <template>

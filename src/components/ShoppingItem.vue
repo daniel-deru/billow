@@ -39,10 +39,12 @@ function checkHandler(e: Event){
 <template>
 <div class="flex justify-between p-3 rounded-xl mb-4 item-container" ref="itemRef">
     <input type="checkbox" v-model="completed" name="" id="" @change="checkHandler">
-    <div class="mx-0 my-auto">{{ item.name }}</div>
-    <div class="mx-0 my-auto">{{ item.price.toFixed(2) }} x {{ item.quantity }}</div>
-    <div class="text-center mx-0 my-auto">{{ total.toFixed(2) }}</div>
-    <div class="icon-container cursor-pointer" @click="() => removeItem(item.id)">
+    <div class="mx-0 my-auto font-bold">{{ item.name }}</div>
+    <div class="price-container flex flex-col">
+        <div class="text-center mx-0 my-auto font-bold">{{ total.toFixed(2) }}</div>
+        <div class=" text-center mx-0 my-auto text-gray-400">{{ item.price.toFixed(2) }} x {{ item.quantity }}</div>
+    </div>
+    <div class="icon-container ml-5 cursor-pointer" @click="() => removeItem(item.id)">
         <Icon v-if="!completed" icon="ic:round-delete" class="icon"/>
         <Icon v-else icon="ic:round-delete" class="icon-completed"/>
     </div>
@@ -59,8 +61,8 @@ function checkHandler(e: Event){
     width: 5%;
 }
 
-.item-container div:not(div.icon-container) {
-    width: 25%;
+.item-container > div:not(div.icon-container) {
+    width: 35%;
 }
 
 .completed {
@@ -76,6 +78,12 @@ function checkHandler(e: Event){
 .icon-completed {
     color: rgb(221, 221, 221);
     font-size: 2em;
+}
+
+.icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 </style>

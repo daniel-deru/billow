@@ -25,16 +25,3 @@ form input:not(input[type="checkbox"]) {
     outline: none;
     border-radius: 10px;
 }
-
-input[type=number] {
-    appearance: none;
-    -moz-appearance: textfield;
-}
-
-@media (hover: hover) {
- 
-}
-
-@media (min-width: 1024px) {
-
-}

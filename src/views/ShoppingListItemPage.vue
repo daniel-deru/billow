@@ -4,7 +4,7 @@ import Modal from '@/components/Modal.vue'
 import { useRouter } from "vue-router"
 import { useListsStore } from "@/stores/lists"
 import { useItemsStore } from "@/stores/items"
-import GroceryListItem from "@/components/GroceryListItem.vue"
+import ShoppingItem from "@/components/ShoppingItem.vue"
 import { storeToRefs } from "pinia"
 import Header from "@/components/Header.vue"
 
@@ -54,7 +54,7 @@ onMounted(() => {
         <section>
             <Header :title="list?.name || 'My List'"/>
             <div>
-                <section class="text-lg font-bold">
+                <section class="text-2xl font-bold">
                     <div class="summary">
                         <div>Total</div>
                         <div>{{ totalCost }}</div>
@@ -65,7 +65,7 @@ onMounted(() => {
                     </div>
                 </section>
                 <section class="mt-4">
-                    <GroceryListItem v-for="item in currentItems" :key="item.id" :item="item"/>
+                    <ShoppingItem v-for="item in currentItems" :key="item.id" :item="item"/>
                 </section>
             </div>
         </section>

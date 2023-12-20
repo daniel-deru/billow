@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import ShoppingListEntryViewVue from '../views/ShoppingListEntryView.vue'
-import ShoppingListViewVue from '../views/ShoppingListView.vue'
+import HomePage from "@/views/HomePage.vue"
+import ShoppingListItemPage from '@/views/ShoppingListItemPage.vue'
+import ShoppingListsPage from '@/views/ShoppingListsPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,17 +9,17 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomePage
     },
     {
       path: '/shopping-lists',
       name: 'shopping-lists',
-      component: ShoppingListViewVue
+      component: ShoppingListsPage
     },
     {
       path: '/shopping-lists/:item',
       name: 'shopping-list-item',
-      component: ShoppingListEntryViewVue
+      component: ShoppingListItemPage
     }
   ]
 })
