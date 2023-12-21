@@ -77,11 +77,11 @@ onMounted(() => {
 
 <style scoped>
 main {
-    padding: 10px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100vh;
+    height: 100dvh;
 }
 
 .summary {

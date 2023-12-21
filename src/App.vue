@@ -10,6 +10,6 @@ import { RouterView } from 'vue-router'
 <style scoped>
 
 .body { 
-  height: 100vh;
+  height: 100dvh;
 }
 </style>

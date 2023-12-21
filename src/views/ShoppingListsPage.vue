@@ -40,7 +40,7 @@ function createList(){
 
 <style scoped>
 .shopping-container {
-    padding: 10px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
