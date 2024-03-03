@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Imports
-import { ref, defineProps, defineEmits, computed} from "vue"
+import { ref, computed} from "vue"
 import { useItemsStore } from "@/stores/items"
 import { v4 as uuidv4 } from "uuid"
 import { useRouter } from "vue-router"

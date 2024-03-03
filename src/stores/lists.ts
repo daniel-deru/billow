@@ -5,7 +5,7 @@ import { defineStore } from 'pinia'
 export interface IList {
   name: string,
   date: number,
-  id: string
+  id?: string
 }
 
 export const useListsStore = defineStore('lists', () => {
@@ -16,7 +16,7 @@ export const useListsStore = defineStore('lists', () => {
   }
 
   function loadLists(newLists: IList[]){
-    lists.value.push(...newLists)
+    lists.value = [...newLists]
   }
 
   function getList(listId: string){
@@ -24,8 +24,10 @@ export const useListsStore = defineStore('lists', () => {
     return list
   }
 
-  function deleteList(listId: string) {
-    lists.value = lists.value.filter(listItem => listItem.id != listId)
+  function deleteList(listId: string | undefined): void {
+    if(listId) {
+      lists.value = lists.value.filter(listItem => listItem.id != listId)
+    }
   }
 
   return { lists, addList, loadLists, getList, deleteList }
