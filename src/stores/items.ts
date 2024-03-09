@@ -6,8 +6,8 @@ export interface IItem {
     price: number,
     quantity: number,
     planned: boolean,
-    listId: string
-    id: string
+    listId?: string
+    id?: string
 }
 
 export const useItemsStore = defineStore('items', () => {
@@ -21,7 +21,7 @@ export const useItemsStore = defineStore('items', () => {
     items.value.push(...newItems)
   }
 
-  function getItems(listId: string) {
+  function getItems(listId: string): Array<IItem> {
     const listItems: IItem[] = items.value.filter(item => item.listId == listId)
     return listItems
   }

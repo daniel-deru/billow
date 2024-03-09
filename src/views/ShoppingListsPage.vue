@@ -38,15 +38,19 @@ async function createList(){
 
 async function getLists(){
     if(lists.value.length <= 0) {
-        const request = await api.get("/shoppinglist")
+        try {
+            const request = await api.get("/shoppinglist")
 
-        if(request.status == 401) {
-            router.push("/login")
-        } else if(request.status == 200) {
-            const responseLists = request.data
-            loadLists(responseLists)
+            if(request.status == 200) {
+                const responseLists = request.data
+                loadLists(responseLists)
+            }
+        } catch (err: any) {
+            console.log(err.response.status)
+            if(err.response.status == 401) {
+                router.push("/login")
+            }
         }
-
     }
 }
 

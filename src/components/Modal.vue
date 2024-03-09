@@ -2,9 +2,9 @@
 // Imports
 import { ref, computed} from "vue"
 import { useItemsStore } from "@/stores/items"
-import { v4 as uuidv4 } from "uuid"
 import { useRouter } from "vue-router"
 import Header from "./Header.vue"
+import api from "@/config/axios"
 
 // Types & Interfaces
 import type { FormHTMLAttributes } from 'vue'
@@ -41,7 +41,7 @@ function changeQuantity(delta: number){
     quanity.value += delta
 }
 
-function createItem(){
+async function createItem(){
     const routeList = router.currentRoute.value.fullPath.split("/")
     const listId = routeList[routeList.length - 1]
 
@@ -50,13 +50,24 @@ function createItem(){
         price: price.value || 0,
         quantity: quanity.value,
         planned: planned.value,
-        id: uuidv4(),
-        listId: listId
     }
 
-    addItem(newItem)
-    emit("modal-close")
-    clearForm()
+    try {
+        const request = await api.post(`/shoppinglist/${listId}/item`, newItem)
+
+        if(request.status == 201) {
+            addItem(newItem)
+            emit("modal-close")
+            clearForm()
+        } else {
+            console.log("Something bad happened!")
+        }
+
+    } catch (err: any) {
+        console.log(err.response)
+    }
+
+
 }
 
 function clearForm(){

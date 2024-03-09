@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import {  ref } from "vue"
-import axios from "axios";
+import axios from "axios"
+import { useRouter } from "vue-router";
 
 const email = ref<string>("")
 const password = ref<string>("")
+
+const router = useRouter()
 
 async function submit(){
 
@@ -21,8 +24,7 @@ async function submit(){
 
         console.log(request.data)
         if(request.status == 201) {
-            // TODO navigate user to login page
-            console.log("user created")
+            router.push("/login")
         }
 
     } catch (err: any) {
