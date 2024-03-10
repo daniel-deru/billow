@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from "vue"
+import { ref, onMounted, computed } from "vue"
 import Modal from '@/components/Modal.vue'
 import { useRouter } from "vue-router"
 import { useListsStore } from "@/stores/lists"
@@ -19,7 +19,7 @@ const listStore = useListsStore()
 const itemStore = useItemsStore()
 
 const { getList } = listStore
-const { getItems } = itemStore
+const { getItems, addItems } = itemStore
 
 const { items } = storeToRefs(itemStore) // create local state from item store
 const router = useRouter()
@@ -34,7 +34,9 @@ const totalCost = computed<number>(() => {
 
 // Get items related to the current list
 const currentItems = computed<IItem[]>(() => {
-    return items.value.filter(item => item.listId == list.value?.id)
+    console.log(items.value)
+    console.log(list.value)
+    return items.value.filter(item => item.shoppinglist_id == list.value?.id)
 })
 
 // Watchers
@@ -68,11 +70,16 @@ async function getCurrentList(): Promise<void> {
             const request = await api.get(`/shoppinglist/${id}/item`)
 
             if(request.status == 200) {
-                items.value = request.data
+                addItems(request.data)
+                console.log(request.data)
             }
 
         } catch (err: any) {
             console.log(err.response.data)
+
+            if(err.response.status == 401) {
+                router.push("/login")
+            }
         }
     } else {
         items.value = localItems
@@ -81,7 +88,7 @@ async function getCurrentList(): Promise<void> {
 
 // Lifecycle Hooks
 onMounted(() => {
-    getCurrentList()
+    getCurrentList() // Get the items for the current list
 })
 
 </script>
@@ -102,7 +109,7 @@ onMounted(() => {
                     </div>
                 </section>
                 <section class="mt-4">
-                    <ShoppingItem v-for="item in items" :key="item.id" :item="item"/>
+                    <ShoppingItem v-for="item in currentItems" :key="item.id" :item="item"/>
                 </section>
             </div>
         </section>

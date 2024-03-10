@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import api from '@/config/axios'
 
 
 export interface IList {
@@ -15,8 +16,17 @@ export const useListsStore = defineStore('lists', () => {
     lists.value.push(list)
   }
 
-  function loadLists(newLists: IList[]){
-    lists.value = [...newLists]
+  async function loadLists(): Promise<void> {
+
+    if(lists.value.length <= 0) {
+      console.log("Getting Lists from Server")
+
+      const request = await api.get("/shoppinglist")
+
+      if(request.status == 200) {
+          lists.value = request.data
+      }
+    }    
   }
 
   function getList(listId: string){

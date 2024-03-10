@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useListsStore } from '@/stores/lists'
-import { onMounted } from 'vue'
+import { useItemsStore } from '@/stores/items'
+import { onMounted, watch } from 'vue'
 import ShoppingListsItem from '@/components/ShoppingListsItem.vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
@@ -9,8 +10,12 @@ import api from '@/config/axios'
 
 
 const listStore = useListsStore()
+const itemStore = useItemsStore()
+const { loadItems } = itemStore
+
 const { lists } = storeToRefs(listStore)
 const { addList, loadLists } = listStore
+
 
 const router = useRouter()
 
@@ -37,23 +42,30 @@ async function createList(){
 }
 
 async function getLists(){
-    if(lists.value.length <= 0) {
-        try {
-            const request = await api.get("/shoppinglist")
+    const routeList = router.currentRoute.value.fullPath.split("/")
+    const id = routeList[routeList.length - 1]
 
-            if(request.status == 200) {
-                const responseLists = request.data
-                loadLists(responseLists)
-            }
-        } catch (err: any) {
-            console.log(err.response.status)
-            if(err.response.status == 401) {
-                router.push("/login")
-            }
+    console.log("Getting Lists from Server")
+    try {
+        console.log(lists.value)
+        await loadLists()
+        // await loadItems(id)
+        console.log(lists.value)
+
+    } catch (err: any) {
+        if(err.response.status == 401) {
+            router.push("/login")
         }
     }
 }
 
+// Watchers
+
+watch(lists, (newList, oldList) => {
+    oldList.values = newList.values
+})
+
+// Lifecycle hooks
 onMounted(() => {
    getLists()
 })
