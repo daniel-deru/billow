@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue"
-import Modal from '@/components/Modal.vue'
+import ItemFormModal from '@/components/ItemFormModal.vue'
 import { useRouter } from "vue-router"
 import { useListsStore } from "@/stores/lists"
 import { useItemsStore } from "@/stores/items"
-import ShoppingItem from "@/components/ShoppingItem.vue"
+import ShoppingItemCard from "@/components/ShoppingItemCard.vue"
 import { storeToRefs } from "pinia"
 import Header from "@/components/Header.vue"
 import api from "@/config/axios"
@@ -32,17 +32,11 @@ const totalCost = computed<number>(() => {
     return sum
 })
 
+// TODO: Look at some way of changing how I find the items instead of filtering out since it requires having the shoppinglist_id on the object which isn't the case if you use client side data before calling the api. Perhaps have the shopping list as the array index
 // Get items related to the current list
 const currentItems = computed<IItem[]>(() => {
-    console.log(items.value)
-    console.log(list.value)
     return items.value.filter(item => item.shoppinglist_id == list.value?.id)
 })
-
-// Watchers
-// watch(items, (newItems, oldItems) => {
-//     items.value = newItems
-// })
 
 
 // Functions
@@ -56,12 +50,13 @@ function hideModal(){
     modalOpen.value = false
 }
 
+// Look at this function
 // Get the current list from the id in the route
 async function getCurrentList(): Promise<void> {
     const routeList = router.currentRoute.value.fullPath.split("/")
     const id = routeList[routeList.length - 1]
 
-    list.value = getList(id)
+    list.value = await getList(id)
     const localItems = getItems(id)
 
     if(localItems.length <= 0) {
@@ -71,7 +66,6 @@ async function getCurrentList(): Promise<void> {
 
             if(request.status == 200) {
                 addItems(request.data)
-                console.log(request.data)
             }
 
         } catch (err: any) {
@@ -109,12 +103,12 @@ onMounted(() => {
                     </div>
                 </section>
                 <section class="mt-4">
-                    <ShoppingItem v-for="item in currentItems" :key="item.id" :item="item"/>
+                    <ShoppingItemCard v-for="item in currentItems" :key="item.id" :item="item"/>
                 </section>
             </div>
         </section>
         <button @click.prevent="showModal">New Item</button>
-        <Modal :is-open="modalOpen" @modal-close="hideModal"/>
+        <ItemFormModal :is-open="modalOpen" @modal-close="hideModal"/>
     </main>
 
 </template>

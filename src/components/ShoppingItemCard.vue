@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import type { IItem } from '@/stores/items'
 import { Icon } from "@iconify/vue"
 import { useItemsStore } from "@/stores/items"
@@ -34,6 +34,10 @@ function checkHandler(e: Event){
     }
 }
 
+onMounted(() => {
+    console.log("Shopping Item Mounted")
+})
+
 </script>
 
 <template>
@@ -50,7 +54,7 @@ function checkHandler(e: Event){
             {{ item.price.toFixed(2) }} x {{ item.quantity }}
         </div>
     </div>
-    <div class="icon-container ml-5 cursor-pointer" @click="() => removeItem(item?.id)">
+    <div class="icon-container ml-5 cursor-pointer" @click="() => removeItem(item)">
         <Icon v-if="!completed" icon="ic:round-delete" class="icon"/>
         <Icon v-else icon="ic:round-delete" class="icon-completed"/>
     </div>

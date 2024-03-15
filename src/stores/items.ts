@@ -14,8 +14,20 @@ export interface IItem {
 export const useItemsStore = defineStore('items', () => {
   const items = ref<IItem[]>([])
   
-  function addItem(item: IItem){
-    items.value.push(item)
+  async function addItem(item: IItem, listId: string): Promise<void> {
+
+    try {
+      const request = await api.post(`/shoppinglist/${listId}/item`, item)
+
+      if(request.status == 201) {
+        items.value.push(request.data)
+      } else {
+          console.log("Something bad happened!")
+        }
+    } catch (err: any) {
+        console.log(err.response)
+      }
+    
   }
 
   function addItems(newItems: IItem[]){
@@ -27,20 +39,33 @@ export const useItemsStore = defineStore('items', () => {
     return listItems
   }
 
-  async function loadItems(listId: string): Promise<void> {
-    if(items.value.length <= 0) {
-      const request = await api.get(`/shoppinglist/${listId}/item`)
+  async function loadItems(listId: string | undefined): Promise<void> {
+    if(items.value.length <= 0 && listId) {
 
+      console.log("Making a server request to get items")
+
+      const request = await api.get(`/shoppinglist/${listId}/item`)
+      
       if(request.status == 200) {
-        items.value.push(request.data)
+        items.value = [...items.value, ...request.data]
       }
     }
   }
 
-  function removeItem(itemId: string | undefined) {
-    console.log(items.value)
-    items.value = items.value.filter(item => item.id != itemId)
-    console.log(items.value)
+  async function removeItem(item: IItem | undefined) {
+    if(!item) return
+
+    try {
+      const request  = await api.delete(`/shoppinglist/${item.shoppinglist_id}/item/${item.id}`)
+      
+      if(request.status == 200) {
+        items.value = items.value.filter(curItem => curItem.id != item.id)
+      }
+
+    } catch (err: any) {
+        console.log(err.response.data)
+      }
+    
   }
 
   return { items, addItem, addItems, getItems, removeItem, loadItems }

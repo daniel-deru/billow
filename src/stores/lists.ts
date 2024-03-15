@@ -29,14 +29,38 @@ export const useListsStore = defineStore('lists', () => {
     }    
   }
 
-  function getList(listId: string){
-    const list: IList = lists.value.filter(list => list.id == listId)[0]
-    return list
+  async function getList(listId: string){
+    const list: IList[] = lists.value.filter(list => list.id == listId)
+
+    if(list.length <= 0) {
+      try {
+        const request = await api.get(`/shoppinglist/${listId}`)
+
+        if(request.status == 200) {
+          lists.value.push(request.data)
+        }
+
+        return request.data
+
+      } catch (err: any) {
+          console.log(err.response.data)
+      }
+    } 
+    return list[0]
   }
 
-  function deleteList(listId: string | undefined): void {
-    if(listId) {
-      lists.value = lists.value.filter(listItem => listItem.id != listId)
+  async function deleteList(listId: string | undefined): Promise<void> {
+    if(!listId) return
+
+    try {
+      const request = await api.delete(`/shoppinglist/${listId}`)
+
+      if(request.status == 200) {
+        lists.value = lists.value.filter(listItem => listItem.id != listId)
+      }
+
+    } catch (err: any) {
+        console.log(err.response.data)
     }
   }
 

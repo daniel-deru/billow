@@ -22,7 +22,6 @@ async function submit(){
     try {
         const request = await axios.post("/users/signup", body, {headers})
 
-        console.log(request.data)
         if(request.status == 201) {
             router.push("/login")
         }

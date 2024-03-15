@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from "@/views/HomePage.vue"
 import ShoppingListItemPage from '@/views/ShoppingListItemPage.vue'
-import ShoppingListsPage from '@/views/ShoppingListsPage.vue'
+import MyShoppingListsPage from '@/views/MyShoppingListsPage.vue'
 import SignUpPage from '@/views/SignUpPage.vue'
 import LoginPage from '@/views/LoginPage.vue'
 
@@ -26,7 +26,7 @@ const router = createRouter({
     {
       path: '/shopping-lists',
       name: 'shopping-lists',
-      component: ShoppingListsPage
+      component: MyShoppingListsPage
     },
     {
       path: '/shopping-lists/:item',

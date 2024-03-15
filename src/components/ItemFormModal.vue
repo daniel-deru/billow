@@ -4,7 +4,6 @@ import { ref, computed} from "vue"
 import { useItemsStore } from "@/stores/items"
 import { useRouter } from "vue-router"
 import Header from "./Header.vue"
-import api from "@/config/axios"
 
 // Types & Interfaces
 import type { FormHTMLAttributes } from 'vue'
@@ -52,22 +51,10 @@ async function createItem(){
         planned: planned.value,
     }
 
-    try {
-        const request = await api.post(`/shoppinglist/${listId}/item`, newItem)
-
-        if(request.status == 201) {
-            addItem(newItem)
-            emit("modal-close")
-            clearForm()
-        } else {
-            console.log("Something bad happened!")
-        }
-
-    } catch (err: any) {
-        console.log(err.response)
-    }
-
-
+    await addItem(newItem, listId)
+    console.log("addItem function called")
+    emit("modal-close")
+    clearForm()
 }
 
 function clearForm(){
@@ -80,8 +67,6 @@ function clearForm(){
 function goBack(){
     emit("modal-close")
 }
-
-// Lifecycle Hooks
 
 // Macros
 defineProps<IModalProps>()
