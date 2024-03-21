@@ -25,30 +25,40 @@ const { items } = storeToRefs(itemStore) // create local state from item store
 const router = useRouter()
 
 // Computed Properties
-// Get the total cost of items
 const totalCost = computed<number>(() => {
-    let sum = 0
-    items.value.forEach(item => sum += (item.price * item.quantity))
-    return sum
+    return Object.values(items.value).reduce(sumTotal, 0)
+})
+
+const currentCompletedCost = computed<number>(() => {
+    return currentItems.value.filter(filterCompletedItems).reduce(sumTotal, 0)
 })
 
 // TODO: Look at some way of changing how I find the items instead of filtering out since it requires having the shoppinglist_id on the object which isn't the case if you use client side data before calling the api. Perhaps have the shopping list as the array index
+// TODO: Create a separation between completed and incomplete items. 
 // Get items related to the current list
 const currentItems = computed<IItem[]>(() => {
-    return items.value.filter(item => item.shoppinglist_id == list.value?.id)
+    return items.value.filter(filterCurrentItems).sort(sortByCompleted)
+})
+
+const completedItems = computed<number>(() => {
+    return currentItems.value.filter(filterCompletedItems).length
 })
 
 
 // Functions
-// Show the create item modal
-function showModal(){
-    modalOpen.value = true
-}
+// Filters out items not related to the current item
+const filterCurrentItems = (item: IItem) => item.shoppinglist_id == list.value?.id
 
-// Hide the create item modal
-function hideModal(){
-    modalOpen.value = false
-}
+const filterCompletedItems = (item: IItem) => item.completed
+
+// Sorts items by completed. Places completed items last
+const sortByCompleted = (item: IItem) => item.completed ? 1 : 0
+
+// Calculate the total for all items in this list
+const sumTotal = (total: number, item: IItem) => total + (item.price * item.quantity)
+
+const showModal = () => modalOpen.value = true
+const hideModal = () => modalOpen.value = false
 
 // Look at this function
 // Get the current list from the id in the route
@@ -95,11 +105,11 @@ onMounted(() => {
                 <section class="text-2xl font-bold">
                     <div class="summary">
                         <div>Total</div>
-                        <div>{{ totalCost }}</div>
+                        <div>{{ currentCompletedCost }} / {{ totalCost }}</div>
                     </div>
                     <div class="summary">
                         <div>Items</div>
-                        <div>{{ items.length }}</div>
+                        <div>{{ completedItems }} / {{ items.length }}</div>
                     </div>
                 </section>
                 <section class="mt-4">

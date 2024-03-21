@@ -7,6 +7,7 @@ export interface IItem {
     price: number,
     quantity: number,
     planned: boolean,
+    completed: boolean | null
     shoppinglist_id?: string
     id?: string
 }
@@ -68,5 +69,25 @@ export const useItemsStore = defineStore('items', () => {
     
   }
 
-  return { items, addItem, addItems, getItems, removeItem, loadItems }
+  async function completeItem(item: IItem): Promise<void> {
+    if(!item) return
+
+    try {
+      const request = await api.put(
+        `/shoppinglist/${item.shoppinglist_id}/item/${item.id}/complete`, 
+        {completed: !item.completed}
+      )
+
+      if(request.status == 200) {
+        const itemIndex = items.value.findIndex(i => i.id == item.id)
+        items.value[itemIndex].completed = !item.completed
+      }
+
+
+    } catch (err: any) {
+      console.log(err)
+    }
+  }
+
+  return { items, addItem, addItems, getItems, removeItem, loadItems, completeItem }
 })
