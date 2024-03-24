@@ -36,7 +36,7 @@ async function submit(){
 
 <template>
 <main>
-<h1>Sign Up</h1>
+<h1 class="text-center font-bold text-2xl pt-10">Sign Up</h1>
 <form>
     <div>
         <label for="email">Email</label>

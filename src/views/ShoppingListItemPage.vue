@@ -30,24 +30,25 @@ const totalCost = computed<number>(() => {
 })
 
 const currentCompletedCost = computed<number>(() => {
-    return currentItems.value.filter(filterCompletedItems).reduce(sumTotal, 0)
+    return items.value.filter(filterCurrentItems).filter(filterCompletedItems).reduce(sumTotal, 0)
 })
 
 // TODO: Look at some way of changing how I find the items instead of filtering out since it requires having the shoppinglist_id on the object which isn't the case if you use client side data before calling the api. Perhaps have the shopping list as the array index
-// TODO: Create a separation between completed and incomplete items. 
 // Get items related to the current list
 const currentItems = computed<IItem[]>(() => {
-    return items.value.filter(filterCurrentItems).sort(sortByCompleted)
+    return items.value.filter(filterCurrentItems).filter(filterActiveItems).sort(sortByCompleted)
 })
 
-const completedItems = computed<number>(() => {
-    return currentItems.value.filter(filterCompletedItems).length
+const completedItems = computed<IItem[]>(() => {
+    return items.value.filter(filterCurrentItems).filter(filterCompletedItems)
 })
 
 
 // Functions
 // Filters out items not related to the current item
 const filterCurrentItems = (item: IItem) => item.shoppinglist_id == list.value?.id
+
+const filterActiveItems = (item: IItem) => !item.completed
 
 const filterCompletedItems = (item: IItem) => item.completed
 
@@ -102,19 +103,30 @@ onMounted(() => {
         <section>
             <Header :title="list?.name || 'My List'"/>
             <div>
-                <section class="text-2xl font-bold">
+                <section class="text-2xl font-bold pb-2">
                     <div class="summary">
                         <div>Total</div>
                         <div>{{ currentCompletedCost }} / {{ totalCost }}</div>
                     </div>
                     <div class="summary">
                         <div>Items</div>
-                        <div>{{ completedItems }} / {{ items.length }}</div>
+                        <div>{{ completedItems.length }} / {{ items.length }}</div>
                     </div>
                 </section>
-                <section class="mt-4">
-                    <ShoppingItemCard v-for="item in currentItems" :key="item.id" :item="item"/>
-                </section>
+                <div class="overflow-y-scroll item-container">
+                    <section >
+                        <h2 class="border-b-2 border-indigo-500 text-center text-xl">Current Items</h2>
+                        <div class="mt-4">
+                            <ShoppingItemCard v-for="item in currentItems" :key="item.id" :item="item"/>
+                        </div>
+                    </section>
+                    <section>
+                        <h2 class="border-b-2 border-indigo-500 text-center text-xl">Completed Items</h2>
+                        <div class="mt-4">
+                            <ShoppingItemCard v-for="item in completedItems" :key="item.id" :item="item"/>
+                        </div>
+                    </section>
+                </div>
             </div>
         </section>
         <button @click.prevent="showModal">New Item</button>
@@ -130,6 +142,11 @@ main {
     flex-direction: column;
     justify-content: space-between;
     height: 100dvh;
+}
+
+.item-container {
+    overflow-y: auto;
+    max-height: 70dvh;
 }
 
 .summary {

@@ -26,11 +26,15 @@ async function submit(){
 
 }
 
+function goToSignUp(){
+    router.push("/signup")
+}
+
 </script>
 
 <template>
     <main>
-        <h1>Login</h1>
+        <h1 class="text-center pt-10 text-2xl font-bold">Login</h1>
         <form>
             <div>
                 <label for="email">Email</label>
@@ -41,6 +45,8 @@ async function submit(){
                 <input type="password" name="password" v-model="password">
             </div>
             <button @click.prevent="submit" type="button">Login</button>
+            <div class="text-center text-lg">or</div>
+            <button @click.prevent="goToSignUp" type="button">Go To Sign Up</button>
         </form>
     </main>
 </template>
