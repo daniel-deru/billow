@@ -43,6 +43,7 @@ async function getLists(){
     console.log("Getting Lists from Server")
     try {
         await loadLists()
+        console.log(lists.value)
 
     } catch (err: any) {
         if(err.response.status == 401) {

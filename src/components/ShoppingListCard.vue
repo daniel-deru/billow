@@ -36,9 +36,10 @@ const { list } = defineProps<IProps>()
 // Computed Properties
 const totalCost = computed<number>(() => {
     let sum = 0
+    if(!list.id) return 0
 
-    if(items) {
-        items.value.forEach((item: IItem) =>  {
+    if(items.value[list.id]) {
+        items.value[list.id].forEach((item: IItem) =>  {
             sum += (item.price * item.quantity)
         })
     }
@@ -58,7 +59,7 @@ function goToList(){
         <div class="data-container"  @click="goToList">
             <div >
                 <div class="">{{ list.name }}</div>
-                <div class="text-gray-500">{{ items?.length }} Items</div>
+                <div class="text-gray-500">{{ list.id && items[list.id]?.length }} Items</div>
             </div>
             <div class="text-indigo-500 text-2xl mx-0 my-auto">{{ totalCost }}</div>
         </div>

@@ -6,7 +6,7 @@ import api from '@/config/axios'
 export interface IList {
   name: string,
   date: number,
-  id?: string
+  id?: number
 }
 
 export const useListsStore = defineStore('lists', () => {
@@ -29,7 +29,7 @@ export const useListsStore = defineStore('lists', () => {
     }    
   }
 
-  async function getList(listId: string){
+  async function getList(listId: number){
     const list: IList[] = lists.value.filter(list => list.id == listId)
 
     if(list.length <= 0) {
@@ -49,7 +49,7 @@ export const useListsStore = defineStore('lists', () => {
     return list[0]
   }
 
-  async function deleteList(listId: string | undefined): Promise<void> {
+  async function deleteList(listId: number | undefined): Promise<void> {
     if(!listId) return
 
     try {

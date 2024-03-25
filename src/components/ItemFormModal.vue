@@ -49,6 +49,7 @@ async function createItem(){
         price: price.value || 0,
         quantity: quanity.value,
         planned: planned.value,
+        completed: false
     }
 
     await addItem(newItem, listId)
