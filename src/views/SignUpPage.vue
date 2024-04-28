@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {  ref } from "vue"
-import axios from "axios"
+import api from "@/config/axios";
 import { useRouter } from "vue-router";
 
 const email = ref<string>("")
@@ -9,7 +9,7 @@ const password = ref<string>("")
 const router = useRouter()
 
 async function submit(){
-
+   
     const body = {
         email: email.value,
         password: password.value
@@ -20,7 +20,7 @@ async function submit(){
     }
 
     try {
-        const request = await axios.post("/users/signup", body, {headers})
+        const request = await api.post("/users/signup", body, {headers})
 
         if(request.status == 201) {
             router.push("/login")

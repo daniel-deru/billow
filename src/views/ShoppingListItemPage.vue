@@ -32,26 +32,22 @@ const totalCost = computed<number>(() => {
 
 const currentCompletedCost = computed<number>(() => {
     if(!list.value?.id) return 0
-    return items.value[list.value.id].filter(filterCurrentItems).filter(filterCompletedItems).reduce(sumTotal, 0)
+    return items.value[list.value.id].filter(filterCompletedItems).reduce(sumTotal, 0)
 })
 
-// TODO: Look at some way of changing how I find the items instead of filtering out since it requires having the shoppinglist_id on the object which isn't the case if you use client side data before calling the api. Perhaps have the shopping list as the array index
 // Get items related to the current list
 const currentItems = computed<IItem[]>(() => {
     if(!list.value?.id) return []
-    return items.value[list.value.id].filter(filterCurrentItems).filter(filterActiveItems).sort(sortByCompleted)
+    return items.value[list.value.id].filter(filterActiveItems).sort(sortByCompleted)
 })
 
 const completedItems = computed<IItem[]>(() => {
     if(!list.value?.id) return []
-    return items.value[list.value.id].filter(filterCurrentItems).filter(filterCompletedItems)
+    return items.value[list.value.id].filter(filterCompletedItems)
 })
 
 
 // Functions
-// Filters out items not related to the current item
-const filterCurrentItems = (item: IItem) => item.shoppinglist_id == list.value?.id
-
 const filterActiveItems = (item: IItem) => !item.completed
 
 const filterCompletedItems = (item: IItem) => item.completed
@@ -67,6 +63,7 @@ const hideModal = () => modalOpen.value = false
 
 // Look at this function
 // Get the current list from the id in the route
+// TODO: Refactor this so that the api call becomes part of the store instead
 async function getCurrentList(): Promise<void> {
     const routeList = router.currentRoute.value.fullPath.split("/")
     const id = routeList[routeList.length - 1]

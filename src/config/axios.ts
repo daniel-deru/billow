@@ -2,7 +2,7 @@ import axios from "axios"
 
 const api = axios.create({
     withCredentials: true,
-    baseURL: "http://localhost:3000"
+    baseURL: "https://griffon.optimatechlab.com"
 })
 
 export default api
