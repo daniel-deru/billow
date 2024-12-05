@@ -26,7 +26,6 @@ const total = computed<number>(() => {
 // Functions
 const toggleCompleted = () => {
     completeItem(item)
-    toggleExpandCard()
 }
 const toggleExpandCard = () => expanded.value = !expanded.value
 

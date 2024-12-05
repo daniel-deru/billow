@@ -28,3 +28,10 @@ function goBack() {
         <Icon icon="clarity:home-solid" class="align-middle text-3xl text-indigo-500" @click.prevent="() => router.push('/')"/>
     </header>
 </template>
+
+<style>
+header {
+    height: 10vh;
+}
+
+</style>
