@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import Header from '@/components/Header.vue'
 import api from '@/config/axios'
+import axios, { AxiosError } from 'axios'
 
 
 const listStore = useListsStore()
@@ -31,8 +32,10 @@ async function createList(){
         addList(newList)
 
         router.push(`/shopping-lists/${newList?.id}`)
-    } catch (err: any) {
-        console.log(err.response.data)
+    } catch (err: unknown) {
+        if(axios.isAxiosError(err)){
+            console.log((err as AxiosError).response?.data)
+        }
     }
 
 
@@ -66,12 +69,16 @@ onMounted(() => {
 </script>
 
 <template>
-    <main class="shopping-container">  
-        <section>
-            <Header title="My Shopping Lists"/>
+    <main class="shopping-container">
+        <Header title="My Shopping Lists"/>  
+        <section class="shopping-card-container">
             <ShoppingListCard v-for="listItem in lists" :list="listItem" :key="listItem.id" />
         </section>
-        <button @click.prevent="createList">New List</button>
+        <section class="add-btn-container">
+            <button @click.prevent="createList" class="add-btn">New List</button>
+        </section>
+        
+        
     </main>
 </template>
 
@@ -81,5 +88,14 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.shopping-card-container {
+    height: 90vh;
+    overflow: scroll;
+}
+
+.add-btn-container {
+    padding-top: 1em;
 }
 </style>

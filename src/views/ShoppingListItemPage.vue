@@ -117,13 +117,13 @@ onMounted(() => {
                     </div>
                 </section>
                 <div class="overflow-y-scroll item-container">
-                    <section >
+                    <section v-if="currentItems.length > 0">
                         <h2 class="border-b-2 border-indigo-500 text-center text-xl">Current Items</h2>
                         <div class="mt-4">
                             <ShoppingItemCard v-for="item in currentItems" :key="item.id" :item="item"/>
                         </div>
                     </section>
-                    <section>
+                    <section v-if="completedItems.length > 0">
                         <h2 class="border-b-2 border-indigo-500 text-center text-xl">Completed Items</h2>
                         <div class="mt-4">
                             <ShoppingItemCard v-for="item in completedItems" :key="item.id" :item="item"/>
@@ -138,7 +138,7 @@ onMounted(() => {
 
 </template>
 
-<style scoped>
+<style scoped lang="css">
 main {
     padding: 15px;
     display: flex;

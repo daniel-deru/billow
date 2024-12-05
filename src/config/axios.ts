@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const MODE = "PROD"
+const MODE: string = "DEV"
 
 const api = axios.create({
     withCredentials: true,
